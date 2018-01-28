@@ -21,9 +21,19 @@ public class Horse : NetworkBehaviour
     private float cameraDistance = 8;
 
     [SerializeField]
+    private float defaultSpeed = 10;
+
+    [SerializeField]
     private float speed = 10;
 
     private float _acceleration;
+
+    public Transform forwardRopeSocket;
+    public Transform backRopeSocket;
+
+    [SerializeField]
+    private GameObject youGameObject;
+
 
     private void Awake()
     {
@@ -35,6 +45,8 @@ public class Horse : NetworkBehaviour
 
     public void Update()
     {
+        youGameObject.SetActive(hasAuthority);
+
         if (!isWalking) return;
 
         if (hasAuthority)
@@ -64,6 +76,7 @@ public class Horse : NetworkBehaviour
         if (hasAuthority)
         {
             Vector3 cameraPos = Camera.main.transform.position;
+            cameraPos.x = Mathf.Lerp(Camera.main.transform.position.x, transform.position.x, Time.deltaTime * 1);
             cameraPos.z = transform.position.z - cameraDistance;
             Camera.main.transform.position = cameraPos;
         }
@@ -91,6 +104,7 @@ public class Horse : NetworkBehaviour
     [ClientRpc]
     public void RpcStartWalking()
     {
+        speed = defaultSpeed;
         position = transform.position;
         isWalking = true;
     }
@@ -105,6 +119,7 @@ public class Horse : NetworkBehaviour
     {
         Debug.Log("On collision enter");
         speed = 0;
+        
     }
 
 

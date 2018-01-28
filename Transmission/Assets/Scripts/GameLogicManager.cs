@@ -42,6 +42,8 @@ public class GameLogicManager : NetworkBehaviour
         tooFarBillboard.SetActive(false);
         tooCloseBillboard.SetActive(false);
 
+        //RpcHideBillboards();
+
         if (net == null)
             net = FindObjectOfType<Network>();
         
@@ -68,8 +70,7 @@ public class GameLogicManager : NetworkBehaviour
 
     private void StartGame ()
     {
-        tooFarBillboard.SetActive(false);
-        tooCloseBillboard.SetActive(false);
+        
 
         StartCoroutine(GameRoutine());
     }
@@ -77,6 +78,7 @@ public class GameLogicManager : NetworkBehaviour
     private IEnumerator GameRoutine()
     {
         yield return new WaitForSeconds(1);
+        RpcHideBillboards();
 
         Horse[] horses = FindObjectsOfType<Horse>();
         foreach (Horse horse in horses)
@@ -89,9 +91,7 @@ public class GameLogicManager : NetworkBehaviour
         
         localPlayer.RpcSetPosition(leftStartPosition.position);
         remotePlayer.RpcSetPosition(rightStartPosition.position);
-
         
-
         _character.leftHorse = localPlayer;
         _character.rightHorse = remotePlayer;
         
@@ -106,7 +106,8 @@ public class GameLogicManager : NetworkBehaviour
 
             if (Vector3.Distance(localPlayer.transform.position, remotePlayer.transform.position) > maxDistance)
             {
-                tooFarBillboard.SetActive(true);
+                RpcShowTooFarBillboard();
+                //tooFarBillboard.SetActive(true);
                 localPlayer.RpcStopWalking();
                 remotePlayer.RpcStopWalking();
                 yield return new WaitForSeconds(3);
@@ -114,9 +115,9 @@ public class GameLogicManager : NetworkBehaviour
                 break;
             }
 
-            if (Vector3.Distance(localPlayer.transform.position, remotePlayer.transform.position) > minDistance)
+            if (Vector3.Distance(localPlayer.transform.position, remotePlayer.transform.position) < minDistance)
             {
-                tooCloseBillboard.SetActive(true);
+                RpcShowTooCloseBillboard();
                 localPlayer.RpcStopWalking();
                 remotePlayer.RpcStopWalking();
                 yield return new WaitForSeconds(3);
@@ -129,16 +130,31 @@ public class GameLogicManager : NetworkBehaviour
     }
 
 
+    [ClientRpc]
+    public void RpcShowTooCloseBillboard()
+    {
+        tooCloseBillboard.SetActive(true);
+    }
+
+    [ClientRpc]
+    public void RpcShowTooFarBillboard()
+    {
+        tooFarBillboard.SetActive(true);
+    }
+
+    [ClientRpc]
+    public void RpcHideBillboards()
+    {
+        tooFarBillboard.SetActive(false);
+        tooCloseBillboard.SetActive(false);
+    }
+
+
+
     private IEnumerator BlocksMoveRoutine ()
     {
 
-        
             yield return null;
-            
-
-          
-
-        
 
     }
     
