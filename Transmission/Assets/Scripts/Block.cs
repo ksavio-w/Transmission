@@ -1,8 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    [SerializeField] private GameObject forwardSocket
+    public GameObject forwardSocket;
+    public GameObject backwardSocket;
+    
+    public void PlaceAfter(Block previousBlock)
+    {
+        transform.position = previousBlock.backwardSocket.transform.position;
+        transform.rotation = previousBlock.backwardSocket.transform.rotation;
+
+
+    }
+
 }

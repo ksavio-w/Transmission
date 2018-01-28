@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
+using UnityEngine.UI;
 
 public class Network : NetworkManager
 {
@@ -13,11 +14,17 @@ public class Network : NetworkManager
     MatchInfo _currentHostedMatch;
     public event Action NewPlayerConnected = delegate { };
 
+    public Text idText;
+    private int id;
+
     private void Awake()
     {
         networkMatch = this.gameObject.AddComponent<NetworkMatch>();
         StartCoroutine(MatchListUpdateRoutine());
         mainMenu.MatchSelected += OnMatchSelected;
+        
+        id = UnityEngine.Random.Range(1 , 100);
+        idText.text = id.ToString();
     }
 
     private void OnMatchSelected(MatchInfoSnapshot matchInfo)
@@ -56,7 +63,7 @@ public class Network : NetworkManager
 
     public void CreateMatch()
     {
-        string matchName = "room";
+        string matchName = "room " + id.ToString();
         uint matchSize = 2;
         bool matchAdvertise = true;
         string matchPassword = "";
