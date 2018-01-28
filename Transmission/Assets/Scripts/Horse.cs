@@ -14,7 +14,7 @@ public class Horse : NetworkBehaviour
     private NetworkIdentity identity;
     
     Vector3 position;
-    
+
     private void Awake()
     {
         position = transform.position;

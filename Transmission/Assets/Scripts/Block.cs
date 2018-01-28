@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    [SerializeField] private GameObject forwardSocket
+    [SerializeField] private GameObject forwardSocket;
 }

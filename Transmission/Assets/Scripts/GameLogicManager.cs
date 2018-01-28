@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameLogicManager : MonoBehaviour
 {
+    [SerializeField] Sounds sounds;
     [SerializeField] Network net;
-
     [SerializeField]
     private Horse localPlayer; // will be always left
     [SerializeField]
@@ -20,6 +20,7 @@ public class GameLogicManager : MonoBehaviour
             net = FindObjectOfType<Network>();
 
         net.NewPlayerConnected += OnSecondPlayerConnected;
+         
     }
     
     private void OnSecondPlayerConnected ()
